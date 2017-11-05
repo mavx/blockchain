@@ -77,13 +77,23 @@ class Blockchain(object):
         return self.last_block['index'] + 1
     
     def get_balance(self, address):
-        amount = 0
-        for block in self.chain:
-            amount += self.block_transactions_total(block['transactions'], address)
-        return amount
+        """
+        Calculate balance for an address
+
+        :address: <str> A valid Bitcoin public address
+        :return: <float> Address balance
+        """
+        total = self.block_transactions_total
+        return sum(total(block['transactions'], address) for block in self.chain)
 
     def block_transactions_total(self, transactions, address):
-        """Get net transactions amount within a block"""
+        """
+        Get net amount from transactions within a block
+
+        :transactions: <list> List of transactions in a block
+        :address: <str> A valid Bitcoin public address
+        :return: <float> Net amount after subtracting sent amounts from received
+        """
         received = sum(tx['amount'] for tx in transactions if tx['recipient'] == address)
         sent = sum(tx['amount'] for tx in transactions if tx['sender'] == address)
         return received - sent
