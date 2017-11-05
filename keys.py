@@ -8,7 +8,7 @@ import base58
 import ecdsa
 import os
 
-class Key():    
+class Keys():    
     def random_key(self):
         random_key = str(binascii.hexlify(os.urandom(32)), 'utf-8')
         return bytes.fromhex(random_key)
@@ -50,7 +50,7 @@ class Key():
         hashed_public_key = self.public_key_hash(public_key)
         checksum = self.get_checksum(hashed_public_key)
         bin_addr = self.get_bin_addr(hashed_public_key, checksum)
-        return self.get_address(bin_addr)
+        return self.get_address(bin_addr), public_key.hex()
 
 
 if __name__ == '__main__':
