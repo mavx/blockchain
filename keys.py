@@ -54,5 +54,5 @@ class Keys():
 
 
 if __name__ == '__main__':
-    k = Key()
+    k = Keys()
     print('Bitcoin Address:', k.generate())
