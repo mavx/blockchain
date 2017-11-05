@@ -20,13 +20,19 @@ class Blockchain(object):
     
     def register_node(self, address):
         """
-        Add a new node to the list of nodes
+        Add a new node to the list of nodes.
+        You do not add your own node.
 
         :param address: <str> Address of node. Eg. 'http://192.168.0.1:5000'
         :return: None
         """
         parsed_url = urlparse(address)
         self.nodes.add(parsed_url.netloc)
+    
+    def reset_nodes(self):
+        print('Resetting nodes...')
+        self.nodes = set()
+        return self.nodes
     
     def new_block(self, proof, previous_hash=None):
         """
@@ -154,10 +160,13 @@ class Blockchain(object):
 
         # We're only loking for chains longer than ours
         max_length = len(self.chain)
+        print('Our chain length:', max_length)
 
         # Grab and verify the chains from all the nodes in our network
         for node in neighbours:
-            response = requests.get(f'http://{node}/chain')
+            print('Checking node:', node)
+            response = requests.get('https://{}/chain'.format(node))
+            print('GET', response.url)
 
             if response.status_code == 200:
                 length = response.json()['length']
@@ -239,6 +248,13 @@ def full_chain():
     }
     return jsonify(response), 200
 
+@app.route('/nodes', methods=['GET'])
+def get_nodes():
+    response = {
+        'total_nodes': list(blockchain.nodes)
+    }
+    return jsonify(response), 200
+
 @app.route('/nodes/register', methods=['POST'])
 def register_nodes():
     values = request.get_json()
@@ -252,6 +268,15 @@ def register_nodes():
     
     response = {
         'message': 'New nodes have been added',
+        'total_nodes': list(blockchain.nodes)
+    }
+    return jsonify(response), 201
+
+@app.route('/nodes/reset', methods=['GET'])
+def reset_nodes():
+    blockchain.reset_nodes()
+    response = {
+        'message': 'Nodes have been reset',
         'total_nodes': list(blockchain.nodes)
     }
     return jsonify(response), 201
