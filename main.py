@@ -50,6 +50,22 @@ def new_address():
     }
     return jsonify(response), 201
 
+@app.route('/address/balance', methods=['GET'])
+def get_balance():
+    values = request.get_json()
+    address = values.get('address', {})
+    if address:
+        response = {
+            'address': address,
+            'amount': blockchain.get_balance(address)
+        }
+    else:
+        response = {
+            'message': 'Valid address required.'
+        }
+    return jsonify(response), 200
+
+
 @app.route('/transactions/new', methods=['POST'])
 def new_transactions():
     values = request.get_json()

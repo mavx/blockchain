@@ -27,7 +27,7 @@ def mine():
     requests.get('{}/mine'.format(NODE))
     # Check other chain
     requests.get('http://416866a5.ngrok.io/chain')
-    time.sleep(3)
+    time.sleep(2)
 
 def register_node(nodes):
     data = {'nodes': nodes}
@@ -46,14 +46,26 @@ def new_transaction(sender, recipient, amount):
         print(r.json())
         return r.json()
 
+def get_balance(address):
+    data = {
+        'address': address
+    }
+    r = requests.get('{}/address/balance'.format(NODE), json=data)
+    if r.ok:
+        print(r.json())
+        return r.json()
+
+def main():
+    sender = KEYS[0]['public']
+    recipient = KEYS[1]['public']
+    new_transaction(sender, recipient, 10)
+    get_balance(recipient)
+    [mine() for _ in range(3)]
+
 if __name__ == '__main__':
     register_node([
         'http://6c7892c2.ngrok.io/',
     ])
 
-    sender = KEYS[0]['public']
-    recipient = KEYS[1]['public']
-    new_transaction(sender, recipient, 10)
-
     while 1:
-        mine()
+        main()

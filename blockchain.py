@@ -76,6 +76,18 @@ class Blockchain(object):
 
         return self.last_block['index'] + 1
     
+    def get_balance(self, address):
+        amount = 0
+        for block in self.chain:
+            amount += self.block_transactions_total(block['transactions'], address)
+        return amount
+
+    def block_transactions_total(self, transactions, address):
+        """Get net transactions amount within a block"""
+        received = sum(tx['amount'] for tx in transactions if tx['recipient'] == address)
+        sent = sum(tx['amount'] for tx in transactions if tx['sender'] == address)
+        return received - sent
+
     @staticmethod
     def hash(block):
         """
