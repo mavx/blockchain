@@ -3,6 +3,8 @@ import json
 from time import time
 from urllib.parse import urlparse
 
+import requests
+
 import keys
 
 
@@ -185,7 +187,6 @@ class Blockchain(object):
 
         # We're only loking for chains longer than ours
         max_length = len(self.chain)
-        print('Our chain length:', max_length)
 
         # Grab and verify the chains from all the nodes in our network
         for node in neighbours:

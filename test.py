@@ -55,12 +55,18 @@ def get_balance(address):
         print(r.json())
         return r.json()
 
+def consensus():
+    r = requests.get('{}/nodes/resolve'.format(NODE))
+    if r.ok:
+        return r.json()
+
 def main():
     sender = KEYS[0]['public']
     recipient = KEYS[1]['public']
     new_transaction(sender, recipient, 10)
     get_balance(recipient)
     [mine() for _ in range(3)]
+    consensus()
 
 if __name__ == '__main__':
     register_node([
