@@ -42,9 +42,8 @@ def new_transaction(sender, recipient, amount):
         'amount': amount
     }
     r = requests.post('{}/transactions/new'.format(NODE), json=data)
-    if r.ok:
-        print(r.json())
-        return r.json()
+    print(r.json())
+    return r.json()
 
 def get_balance(address):
     data = {

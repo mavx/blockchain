@@ -73,7 +73,10 @@ def new_transactions():
     # Check that the required fields are in the POST'ed data
     required = ['sender', 'recipient', 'amount']
     if not all(k in values for k in required):
-        return 'Missing values', 400
+        return jsonify({'message': 'Missing values'}), 400
+
+    if blockchain.get_balance(values['sender']) < values['amount']:
+        return jsonify({'message': 'Insufficient balance'}), 500
 
     # Create a new Transaction
     index = blockchain.new_transaction(
