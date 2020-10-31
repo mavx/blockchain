@@ -8,6 +8,7 @@ import base58
 import ecdsa
 import os
 
+
 class Keys:
     def random_key(self):
         random_key = str(binascii.hexlify(os.urandom(32)), 'utf-8')
@@ -31,7 +32,7 @@ class Keys:
         hashed_pkey = bytes.fromhex('00') + ripemd160.digest()
         print('Public Key Hash:', hashed_pkey.hex())
         return hashed_pkey
-    
+
     def get_checksum(self, hashed_pkey):
         checksum_full = hashlib.sha256(hashlib.sha256(hashed_pkey).digest()).digest()
         return checksum_full[:4]
