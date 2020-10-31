@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-import requests
 from uuid import uuid4
 
 import blockchain as bc
