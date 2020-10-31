@@ -40,6 +40,7 @@ def mine():
     }
     return jsonify(response), 200
 
+
 @app.route('/address/new', methods=['GET'])
 def new_address():
     pubkey, pkey = blockchain.generate_address()
@@ -48,6 +49,7 @@ def new_address():
         'private_key': pkey
     }
     return jsonify(response), 201
+
 
 @app.route('/address/balance', methods=['GET'])
 def get_balance():
@@ -87,6 +89,7 @@ def new_transactions():
     response = {'message': f'Transaction will be added to Block{index}'}
     return jsonify(response), 201
 
+
 @app.route('/chain', methods=['GET'])
 def full_chain():
     response = {
@@ -95,12 +98,14 @@ def full_chain():
     }
     return jsonify(response), 200
 
+
 @app.route('/nodes', methods=['GET'])
 def get_nodes():
     response = {
         'total_nodes': list(blockchain.nodes)
     }
     return jsonify(response), 200
+
 
 @app.route('/nodes/register', methods=['POST'])
 def register_nodes():
@@ -112,12 +117,13 @@ def register_nodes():
 
     for node in nodes:
         blockchain.register_node(node)
-    
+
     response = {
         'message': 'New nodes have been added',
         'total_nodes': list(blockchain.nodes)
     }
     return jsonify(response), 201
+
 
 @app.route('/nodes/reset', methods=['GET'])
 def reset_nodes():
@@ -127,6 +133,7 @@ def reset_nodes():
         'total_nodes': list(blockchain.nodes)
     }
     return jsonify(response), 201
+
 
 @app.route('/nodes/resolve', methods=['GET'])
 def consensus():
@@ -142,8 +149,9 @@ def consensus():
             'message': 'Our chain is authoritative',
             'chain': blockchain.chain
         }
-    
+
     return jsonify(response), 200
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
