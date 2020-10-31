@@ -8,7 +8,7 @@ import base58
 import ecdsa
 import os
 
-class Keys():    
+class Keys:
     def random_key(self):
         random_key = str(binascii.hexlify(os.urandom(32)), 'utf-8')
         return bytes.fromhex(random_key)
